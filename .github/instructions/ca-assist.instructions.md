@@ -30,7 +30,7 @@ applyTo:
 - Keep Gemini calls in a dedicated, typed API client module. Do not use `any`; preserve narrow message and API response types.
 - Use `react-markdown` for assistant replies. Do not render model output with `dangerouslySetInnerHTML`.
 - Keep the model name in one constant: `gemma-4-26b-a4b-it`. Do not introduce another model or provider.
-- Call the Gemini `generateContent` REST endpoint with `fetch`, pass the fixed CA-focused system prompt through `systemInstruction`, and send the full conversation history.
+- Call the Gemini `generateContent` REST endpoint with `fetch` and send the full conversation history. Gemma 4 rejects `systemInstruction`; prepend the fixed CA-focused prompt to the first user turn in the request instead.
 - Enforce a 30-second request timeout. Map HTTP 429, timeout, missing-key, and other API failures to clear user-safe errors with a Retry action; never expose raw secrets or internal error details.
 
 ## Chat behavior and accessibility
@@ -51,6 +51,6 @@ applyTo:
 ## GitHub Pages delivery
 
 - Keep the production base path aligned with the `CA_Chatbot` repository name and verify asset URLs for GitHub Pages.
-- The workflow at `.github/workflows/deploy.yml` must run on pushes to `main` and `workflow_dispatch`, use Node 20 and `npm ci`, and stop before deployment if lint, type-check, or build fails.
+- The workflow at `.github/workflows/deploy.yml` must run on pushes to `main` and `workflow_dispatch`, use Node 20 and `npm install`, and stop before deployment if lint, type-check, or build fails.
 - Preserve the Pages permissions required by the workflow: `contents: read`, `pages: write`, and `id-token: write`.
 - Before completing implementation work, run the narrowest relevant checks and, when the project is buildable, run lint, type-check, and production build.

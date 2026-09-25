@@ -77,8 +77,9 @@ GitHub Pages
 CI/CD
 GitHub Actions
 
+
 The model name lives in one constant; no model picker in the UI.
-System prompt is passed as systemInstruction in the request body.
+The fixed system prompt is prepended to the first user turn in the request contents because the approved Gemma 4 model rejects the `systemInstruction` field.
 No backend, database or server code.
 
 Source: Gemma on the Gemini API
@@ -105,7 +106,7 @@ flowchart LR
 
   A[Push to main] --> B[Checkout + Node 20]
 
-  B --> C[npm ci]
+  B --> C[npm install]
 
   C --> D[Lint + type-check]
 

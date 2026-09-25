@@ -18,7 +18,7 @@ CA Assist is a static, responsive chatbot for general Chartered Accountant topic
 ## Technology
 
 - Vite, React, and TypeScript (strict mode)
-- Plain CSS and `react-markdown`
+- Plain CSS, `react-markdown`, and GitHub Flavored Markdown table support
 - Google Gemini `generateContent` REST API via `fetch`
 - GitHub Pages and GitHub Actions
 
@@ -31,7 +31,7 @@ The model is fixed in the application; there is no model selector, backend, data
 1. Install dependencies:
 
    ```sh
-   npm ci
+   npm install
    ```
 
 2. Create `.env.local` in the project root and set the Google AI Studio key:
@@ -50,15 +50,20 @@ The model is fixed in the application; there is no model selector, backend, data
 
 The app reads the key from `import.meta.env.VITE_GEMINI_API_KEY`. Never put a real key in source files, documentation, commits, or logs.
 
+The Vite development server proxies Gemini requests through `__gemini` to avoid local browser cross-origin restrictions. This proxy exists only in development; production remains a static site that calls the Gemini REST endpoint directly.
+
 ## Checks and production build
 
 ```sh
 npm run lint
-npm run type-check
+npm run typecheck
 npm run build
+npm run check:bundle
 ```
 
 The deployment workflow runs linting and type-checking before it builds the production site.
+
+The production HTML, JavaScript, and CSS currently total **125,702 bytes (about 122.8 KiB) gzipped**, measured by compressing each generated asset at gzip level 9 with Node.js and summing the results. This is below the 300 KB budget. After building, run `npm run check:bundle` to repeat the check; it fails if the generated assets exceed 300,000 gzip bytes.
 
 ## GitHub Pages deployment
 
